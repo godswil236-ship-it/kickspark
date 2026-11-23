@@ -267,4 +267,47 @@ async function openMatch(id){
   const f=S.fixtures.find(x=>x.id==id); if(!f) return;
   const sh=$("#sheet"); $("#modal").classList.add("on");
   const head=`<div class="row"><b class="sp" style="font-size:17px">${esc(f.home.name)} vs ${esc(f.away.name)}</b><button class="btn alt" id="cl">Close</button></div>`;
- 
+   sh.innerHTML=head+`<p class="mute">Loading…</p>`;
+  $("#cl").onclick=()=>$("#modal").classList.remove("on");
+  let body;
+  try{
+    const j=await fd(`/matches/${id}`);
+    const m=j.match||j;
+    const ev=(m.goals||[]).map(g=>`<div class="ev"><b>${g.minute}′</b> ⚽ ${esc(g.scorer?.name||"Goal")}</div>`).join("")||`<div class="mute">No events yet.</div>`;
+    body=`<div class="card"><div class="sc">${f.hg??"-"} - ${f.ag??"-"}</div><div class="mute" style="text-align:center">${esc(f.league)}</div></div><div class="card">${ev}</div>`;
+  }catch(e){ body=`<div class="card mute">Details unavailable (${esc(e.message)}).</div>`; }
+  sh.innerHTML=head+body;
+  $("#cl").onclick=()=>$("#modal").classList.remove("on");
+}
+
+function makeBanner(){
+  const c=$("#cv"); if(!c) return; const x=c.getContext("2d");
+  const f=S.fixtures.find(f=>f.id==$("#vf").value)||S.fixtures[0];
+  const g=x.createLinearGradient(0,0,1080,1080); g.addColorStop(0,"#2F6BFF"); g.addColorStop(1,"#00C48C");
+  x.fillStyle=g; x.fillRect(0,0,1080,1080);
+  x.fillStyle="#fff"; x.textAlign="center";
+  x.font="bold 56px sans-serif"; x.fillText("KickSpark",540,120);
+  if(!f){ x.font="40px sans-serif"; x.fillText("No match selected",540,540); return; }
+  x.font="36px sans-serif"; x.fillText(f.league,540,200);
+  [[270,f.home],[810,f.away]].forEach(([cx,t])=>{
+    x.beginPath(); x.arc(cx,480,130,0,7); x.fillStyle="#fff"; x.fill();
+    x.fillStyle="#2F6BFF"; x.font="bold 80px sans-serif";
+    x.fillText(t.name.split(" ").map(w=>w[0]).join("").slice(0,3),cx,508);
+    x.fillStyle="#fff"; x.font="bold 40px sans-serif"; x.fillText(t.name.slice(0,18),cx,690);
+  });
+  x.font="bold 90px sans-serif";
+  x.fillText(f.hg!=null?`${f.hg} - ${f.ag}`:"VS",540,500);
+  x.font="36px sans-serif"; x.fillText(new Date(f.date).toLocaleString(),540,900);
+}
+
+/* ============ EVENTS ============ */
+document.addEventListener("click",e=>{
+  const t=e.target.closest("[data-t]"); if(t){S.tab=t.dataset.t;render();return}
+  const go=e.target.closest("[data-go]"); if(go){S.tab=go.dataset.go;render();return}
+  const fx=e.target.closest(".fx"); if(fx){openMatch(fx.dataset.id);return}
+  if(e.target.id==="modal") $("#modal").classList.remove("on");
+});
+render();
+</script>
+</body>
+</html>
