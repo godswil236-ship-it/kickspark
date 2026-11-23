@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>KickSpark – Fixtures, Odds & Picks</title>
+<meta name="theme-color" content="#2F6BFF">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%232F6BFF'/%3E%3Cstop offset='1' stop-color='%2300C48C'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='url(%23g)'/%3E%3Ccircle cx='32' cy='33' r='17' fill='%23fff'/%3E%3Cpath d='M32 22l7 5-3 8h-8l-3-8z' fill='%230E1B3D'/%3E%3Cpath d='M32 22v-5M39 27l6-2M36 35l4 6M28 35l-4 6M25 27l-6-2' stroke='%230E1B3D' stroke-width='2.5' stroke-linecap='round'/%3E%3Cpath d='M47 8l2 5 5 2-5 2-2 5-2-5-5-2 5-2z' fill='%23FFC62E'/%3E%3C/svg%3E">
+<style>
+:root{--bg:#F4F8FF;--card:#fff;--ink:#0E1B3D;--mute:#62708F;--line:#E1E8F5;--blue:#2F6BFF;--mint:#00C48C;--sun:#FFC62E;--coral:#FF5C5C;--r:16px}
+*{box-sizing:border-box;margin:0}
+html,body{height:100%}
+body{font-family:"Trebuchet MS","Segoe UI",system-ui,sans-serif;background:var(--bg);color:var(--ink);padding-top:env(safe-area-inset-top,0)}
+header{background:linear-gradient(120deg,var(--blue),var(--mint));color:#fff;padding:14px 16px 16px;border-radius:0 0 24px 24px}
+.brand{display:flex;align-items:center;gap:10px;font-size:22px;font-weight:800;letter-spacing:-.5px}
+.brand svg{width:34px;height:34px}
+header p{font-size:13px;opacity:.9;margin-top:4px}
+main{max-width:760px;margin:0 auto;padding:14px 14px 96px}
+nav{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);display:flex;overflow-x:auto;padding:6px 6px calc(6px + env(safe-area-inset-bottom,0));z-index:5}
+nav button{flex:1 0 auto;min-width:64px;border:0;background:none;padding:6px 8px;font:inherit;font-size:11px;color:var(--mute);border-radius:12px;cursor:pointer}
+nav button b{display:block;font-size:19px;font-weight:400}
+nav button.on{background:#EAF1FF;color:var(--blue);font-weight:700}
+nav button:focus-visible,.btn:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+h2{font-size:18px;margin:6px 0 10px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:12px;margin-bottom:10px}
+.row{display:flex;align-items:center;gap:10px}
+.sp{flex:1}
+.mute{color:var(--mute);font-size:12px}
+.fx{cursor:pointer;display:grid;grid-template-columns:1fr 64px 1fr;align-items:center;gap:6px}
+.fx .t{display:flex;align-items:center;gap:8px;font-weight:700;font-size:14px;min-width:0}
+.fx .t.r{flex-direction:row-reverse;text-align:right}
+.fx .t span{overflow:hidden;text-overflow:ellipsis}
+.sc{text-align:center;font-weight:800;font-size:18px}
+.sc small{display:block;font-size:11px;font-weight:600;color:var(--mute)}
+.live{color:var(--coral)}
+.logo{width:28px;height:28px;border-radius:50%;object-fit:contain;background:#EEF3FF;flex:none;display:grid;place-items:center;font-size:11px;font-weight:800;color:var(--blue)}
+.btn{border:0;background:var(--blue);color:#fff;font:inherit;font-weight:700;padding:10px 14px;border-radius:12px;cursor:pointer}
+.btn.alt{background:#EAF1FF;color:var(--blue)}
+select,input{font:inherit;padding:10px;border:1px solid var(--line);border-radius:12px;background:#fff;width:100%;color:var(--ink)}
+.bar{height:8px;background:#EAF1FF;border-radius:8px;overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--blue),var(--mint))}
+.odd{display:inline-block;min-width:54px;text-align:center;background:#EAF1FF;border-radius:10px;padding:6px 8px;font-weight:800;margin-left:6px}
+.odd.best{background:var(--sun)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:8px 4px;text-align:center;border-bottom:1px solid var(--line)}
+th:nth-child(2),td:nth-child(2){text-align:left}
+.pill{display:inline-block;background:var(--mint);color:#fff;border-radius:99px;padding:2px 9px;font-size:11px;font-weight:700}
+.demo{background:#FFF6D6;border:1px solid #FFE08A;border-radius:12px;padding:10px;font-size:13px;margin-bottom:10px}
+.modal{position:fixed;inset:0;background:rgba(14,27,61,.5);display:none;align-items:flex-end;z-index:10}
+.modal.on{display:flex}
+.sheet{background:var(--bg);width:100%;max-height:88%;overflow:auto;border-radius:24px 24px 0 0;padding:16px;max-width:760px;margin:0 auto}
+canvas{width:100%;border-radius:var(--r);border:1px solid var(--line);background:#fff}
+.ev{display:flex;gap:8px;margin:6px 0;font-size:13px}
+@media (prefers-reduced-motion:no-preference){.view{animation:in .25s ease}@keyframes in{from{opacity:0}to{opacity:1}}}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">
+    <svg viewBox="0 0 64 64"><rect width="64" height="64" rx="16" fill="#fff"/><circle cx="32" cy="33" r="17" fill="#EAF1FF" stroke="#2F6BFF" stroke-width="3"/><path d="M32 22l7 5-3 8h-8l-3-8z" fill="#0E1B3D"/><path d="M47 8l2 5 5 2-5 2-2 5-2-5-5-2 5-2z" fill="#FFC62E"/></svg>
+    KickSpark
+  </div>
+  <p>Fixtures, live scores, odds and daily picks</p>
+</header>
+<main id="app"></main>
+<nav id="nav"></nav>
+<div class="modal" id="modal"><div class="sheet" id="sheet"></div></div>
+
+<script>
+/* ============ CONFIG ============ */
+const FD = "https://api.football-data.org/v4";            // football-data.org
+const OD = "https://api.the-odds-api.com/v4/sports";      // The Odds API
+const LEAGUES = {PL:"Premier League",PD:"La Liga",BL1:"Bundesliga",SA:"Serie A",FL1:"Ligue 1",CL:"Champions League",ELC:"Championship",PPL:"Primeira Liga",DED:"Eredivisie"};
+const ODDS_KEYS = {soccer_epl:"Premier League",soccer_spain_la_liga:"La Liga",soccer_germany_bundesliga:"Bundesliga",soccer_italy_serie_a:"Serie A",soccer_france_ligue_one:"Ligue 1",soccer_uefa_champs_league:"Champions League"};
+
+/* ============ STATE ============ */
+const store = {
+  get(k,d=""){try{return localStorage.getItem(k)??d}catch(e){return d}},
+  set(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+};
+const today = () => new Date().toLocaleDateString("en-CA");
+const S = {tab:"home", date:today(), league:"PL", oleague:"soccer_epl", fixtures:[], odds:[], demo:false};
+const $ = s => document.querySelector(s);
+
+/* ============ DEMO DATA ============ */
+const T=(id,name)=>({id,name,logo:null});
+const DEMO_FX=[
+ {id:1,date:new Date(Date.now()+3600e3*3).toISOString(),st:"NS",min:"",league:"Premier League",home:T(1,"Northgate FC"),away:T(2,"Riverside United"),hg:null,ag:null},
+ {id:2,date:new Date().toISOString(),st:"LIVE",min:34,league:"La Liga",home:T(3,"Costa Rovers"),away:T(4,"Sol Athletic"),hg:1,ag:0},
+ {id:3,date:new Date(Date.now()-3600e3*5).toISOString(),st:"FT",min:90,league:"Bundesliga",home:T(5,"Alpen SC"),away:T(6,"Rhein 04"),hg:2,ag:2}
+];
+const mkEv=(h,a,l,ho,d,ao,ov,un)=>({home_team:h,away_team:a,sport_title:l,commence_time:new Date(Date.now()+864e5).toISOString(),
+ bookmakers:[{title:"DemoBook A",markets:[{key:"h2h",outcomes:[{name:h,price:ho},{name:"Draw",price:d},{name:a,price:ao}]},{key:"totals",outcomes:[{name:"Over",point:2.5,price:ov},{name:"Under",point:2.5,price:un}]}]},
+ {title:"DemoBook B",markets:[{key:"h2h",outcomes:[{name:h,price:ho+.1},{name:"Draw",price:d-.1},{name:a,price:ao}]},{key:"totals",outcomes:[{name:"Over",point:2.5,price:ov+.05},{name:"Under",point:2.5,price:un}]}]}]});
+const DEMO_ODDS=[mkEv("Northgate FC","Riverside United","Premier League",1.7,3.9,4.8,1.85,2),mkEv("Costa Rovers","Sol Athletic","La Liga",2.4,3.1,3,2.1,1.72),mkEv("Alpen SC","Rhein 04","Bundesliga",1.45,4.8,7,1.6,2.35),mkEv("Milan Rossa","Torino Blu","Serie A",1.9,3.4,4.2,2.05,1.78),mkEv("Lyon Bleu","Nice Azur","Ligue 1",2.2,3.3,3.3,1.95,1.9)];
+
+/* ============ HELPERS ============ */
+const esc = s => String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const logo = t => t.logo ? `<img class="logo" src="${esc(t.logo)}" alt="" loading="lazy">` : `<span class="logo">${esc(t.name.split(" ").map(w=>w[0]).join("").slice(0,3))}</span>`;
+const time = d => new Date(d).toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"});
+const isLive = f => f.st==="LIVE"||f.st==="HT";
+
+const cache = {};
+async function fd(path){
+  const k = store.get("ks_fd"); if(!k) throw new Error("nokey");
+  const c = cache[path]; if(c && Date.now()-c.t < 60000) return c.d;
+  const r = await fetch(FD+path,{headers:{"X-Auth-Token":k}});
+  const j = await r.json();
+  if(!r.ok) throw new Error(j.message || ("Error "+r.status));
+  cache[path] = {t:Date.now(), d:j}; return j;
+}
+async function od(sport){
+  const k = store.get("ks_od"); if(!k) throw new Error("nokey");
+  const r = await fetch(`${OD}/${sport}/odds/?apiKey=${encodeURIComponent(k)}&regions=uk,eu&markets=h2h,totals&oddsFormat=decimal`);
+  if(!r.ok) throw new Error("Odds API error "+r.status);
+  return r.json();
+}
+const ST={IN_PLAY:"LIVE",PAUSED:"HT",FINISHED:"FT",AWARDED:"FT",SCHEDULED:"NS",TIMED:"NS",POSTPONED:"PST",SUSPENDED:"SUSP",CANCELLED:"CANC"};
+const tm = t => ({id:t.id,name:t.shortName||t.name,logo:t.crest});
+const norm = m => ({id:m.id,date:m.utcDate,st:ST[m.status]||m.status,min:m.minute||"",league:m.competition?.name||"",
+  home:tm(m.homeTeam),away:tm(m.awayTeam),
+  hg:m.score?.fullTime?.home ?? m.score?.halfTime?.home ?? null, ag:m.score?.fullTime?.away ?? m.score?.halfTime?.away ?? null});
+
+const fxCard = f => {
+  const done = f.st==="FT";
+  const mid = (isLive(f)||done) ? `${f.hg ?? 0} - ${f.ag ?? 0}<small class="${isLive(f)?"live":""}">${isLive(f)?(f.st==="HT"?"HT":(f.min?f.min+"′ ":"")+"LIVE"):"FT"}</small>` : `${time(f.date)}<small>${esc(f.st)}</small>`;
+  return `<div class="card fx" data-id="${f.id}"><div class="t">${logo(f.home)}<span>${esc(f.home.name)}</span></div><div class="sc">${mid}</div><div class="t r">${logo(f.away)}<span>${esc(f.away.name)}</span></div></div>`;
+};
+
+/* ============ DATA LOADERS ============ */
+async function loadFixtures(date){
+  try{
+    const a=new Date(date+"T00:00:00"), b=new Date(a);
+    a.setDate(a.getDate()-1); b.setDate(b.getDate()+1);
+    const j = await fd(`/matches?dateFrom=${a.toLocaleDateString("en-CA")}&dateTo=${b.toLocaleDateString("en-CA")}`);
+    S.fixtures = j.matches.map(norm).filter(f=>new Date(f.date).toLocaleDateString("en-CA")===date).sort((x,y)=>new Date(x.date)-new Date(y.date));
+    S.demo=false;
+  }catch(e){ S.fixtures = DEMO_FX; S.demo=true; S.err=e.message; }
+}
+async function loadOdds(){
+  try{ S.odds = await od(S.oleague); S.odemo=false; }
+  catch(e){ S.odds = DEMO_ODDS; S.odemo=true; S.oerr=e.message; }
+}
+const demoBanner = (on,msg,what)=> on ? `<div class="demo">Showing sample ${what}. ${msg==="nokey"?"Add your key in <b>Settings</b> to see real data.":"Problem: "+esc(msg||"unknown")}</div>` : "";
+
+/* ============ ODDS / PICKS LOGIC ============ */
+function bestOdds(ev){
+  const out={};
+  ev.bookmakers.forEach(b=>b.markets.forEach(m=>m.outcomes.forEach(o=>{
+    const key=m.key+"|"+o.name+"|"+(o.point??"");
+    if(!out[key]||o.price>out[key].price) out[key]={price:o.price,book:b.title,market:m.key,name:o.name,point:o.point};
+  })));
+  return out;
+}
+function buildPicks(events){
+  const c=[];
+  events.forEach(ev=>["h2h","totals"].forEach(mk=>{
+    const agg={}; let n=0;
+    ev.bookmakers.forEach(b=>{
+      const m=b.markets.find(x=>x.key===mk); if(!m) return;
+      const sum=m.outcomes.reduce((a,o)=>a+1/o.price,0); n++;
+      m.outcomes.forEach(o=>{const k=o.name+"|"+(o.point??""); (agg[k]=agg[k]||{name:o.name,point:o.point,p:0,best:0}); agg[k].p+=(1/o.price)/sum; agg[k].best=Math.max(agg[k].best,o.price);});
+    });
+    if(!n) return;
+    Object.values(agg).forEach(a=>c.push({ev,market:mk==="h2h"?"Match result":"Goals "+(a.point??2.5),pick:mk==="h2h"?(a.name==="Draw"?"Draw":a.name+" to win"):a.name+" "+a.point,prob:a.p/n,odds:a.best}));
+  }));
+  c.sort((a,b)=>b.prob-a.prob);
+  const seen=new Set(), out=[];
+  for(const x of c){ const k=x.ev.home_team+x.ev.away_team; if(!seen.has(k)){seen.add(k);out.push(x);} }
+  for(const x of c){ if(out.length>=11) break; if(!out.includes(x)) out.push(x); }
+  return out.slice(0,11);
+}
+
+/* ============ VIEWS ============ */
+const TABS=[["home","🏠","Home"],["fixtures","📅","Fixtures"],["live","🔴","Live"],["table","🏆","Tables"],["odds","💰","Odds"],["picks","⭐","Picks"],["visual","🖼️","Visuals"],["settings","⚙️","Settings"]];
+function drawNav(){ $("#nav").innerHTML=TABS.map(t=>`<button data-t="${t[0]}" class="${S.tab===t[0]?"on":""}"><b>${t[1]}</b>${t[2]}</button>`).join(""); }
+async function render(){
+  drawNav(); const el=$("#app"); el.innerHTML=`<p class="mute">Loading…</p>`;
+  const html = await VIEWS[S.tab]();
+  el.innerHTML=`<div class="view">${html}</div><p class="mute" style="text-align:center;margin-top:18px">Football data provided by the Football-Data.org API</p>`;
+  if(AFTER[S.tab]) AFTER[S.tab]();
+  window.scrollTo(0,0);
+}
+const AFTER={};
+const VIEWS={
+ async home(){
+  S.date=today(); await loadFixtures(S.date); await loadOdds();
+  const live=S.fixtures.filter(isLive);
+  const picks=buildPicks(S.odds).slice(0,3);
+  return `${demoBanner(S.demo,S.err,"fixtures")}
+  <h2>Live now</h2>${live.length?live.slice(0,4).map(fxCard).join(""):`<div class="card mute">No live matches right now.</div>`}
+  <h2>Today's top picks</h2>${picks.map(pickCard).join("")}
+  <button class="btn alt" data-go="picks">See all 11 picks</button>
+  <h2>Today's matches</h2>${S.fixtures.slice(0,10).map(fxCard).join("")||`<div class="card mute">No matches today in the covered leagues.</div>`}`;
+ },
+ async fixtures(){
+  await loadFixtures(S.date);
+  return `${demoBanner(S.demo,S.err,"fixtures")}<h2>Fixtures</h2><input type="date" id="dt" value="${S.date}" aria-label="Pick a date" style="margin-bottom:10px">
+  ${groupByLeague(S.fixtures)||`<div class="card mute">No matches on this date.</div>`}`;
+ },
+ async live(){
+  await loadFixtures(today());
+  const list=S.fixtures.filter(isLive);
+  return `${demoBanner(S.demo,S.err,"live match")}<h2>Live scores</h2><button class="btn alt" data-go="live" style="margin-bottom:10px">Refresh</button>${groupByLeague(list)||`<div class="card mute">No live matches right now.</div>`}<p class="mute">Free plan scores can be delayed. Updates are cached for 1 minute.</p>`;
+ },
+ async table(){
+  let rows,err;
+  try{ const j=await fd(`/competitions/${S.league}/standings`); const s=j.standings.find(x=>x.type==="TOTAL")||j.standings[0]; rows=s.table.map(r=>({rank:r.position,team:{name:r.team.shortName||r.team.name,logo:r.team.crest},p:r.playedGames,gd:r.goalDifference,pts:r.points})); }
+  catch(e){ err=e.message; rows=[1,2,3,4,5].map(i=>({rank:i,team:{name:"Demo Team "+i,logo:null},p:12,gd:10-i*2,pts:30-i*3})); }
+  return `${demoBanner(!!err,err,"table")}<h2>League tables</h2>
+  <select id="lg" aria-label="League" style="margin-bottom:10px">${Object.entries(LEAGUES).map(([i,n])=>`<option value="${i}" ${i===S.league?"selected":""}>${n}</option>`).join("")}</select>
+  <div class="card"><table><tr><th>#</th><th>Team</th><th>P</th><th>GD</th><th>Pts</th></tr>${rows.map(r=>`<tr><td>${r.rank}</td><td><div class="row">${logo(r.team)}${esc(r.team.name)}</div></td><td>${r.p}</td><td>${r.gd}</td><td><b>${r.pts}</b></td></tr>`).join("")}</table></div>`;
+ },
+ async odds(){
+  await loadOdds();
+  return `${demoBanner(S.odemo,S.oerr,"odds")}<h2>Odds comparison</h2>
+  <select id="ol" aria-label="League" style="margin-bottom:10px">${Object.entries(ODDS_KEYS).map(([k,n])=>`<option value="${k}" ${k===S.oleague?"selected":""}>${n}</option>`).join("")}</select>
+  ${S.odds.map(ev=>{const b=bestOdds(ev); const g=(n)=>b["h2h|"+n+"|"]; return `<div class="card"><b>${esc(ev.home_team)} vs ${esc(ev.away_team)}</b><div class="mute">${new Date(ev.commence_time).toLocaleString([], {weekday:"short",hour:"2-digit",minute:"2-digit"})} · ${ev.bookmakers.length} bookmakers</div>
+  <div style="margin-top:8px;line-height:2.3">${[["1",ev.home_team],["X","Draw"],["2",ev.away_team]].map(([l,n])=>g(n)?`${l}<span class="odd best" title="${esc(g(n).book)}">${g(n).price.toFixed(2)}</span>`:"").join("")}
+  ${b["totals|Over|2.5"]?`<br>O2.5<span class="odd">${b["totals|Over|2.5"].price.toFixed(2)}</span> U2.5<span class="odd">${(b["totals|Under|2.5"]||{price:0}).price.toFixed(2)}</span>`:""}</div></div>`}).join("")||`<div class="card mute">No odds available for this league.</div>`}
+  <p class="mute">Highlighted = best price across bookmakers. Odds change quickly; check the bookmaker before acting.</p>`;
+ },
+ async picks(){
+  await loadOdds(); const p=buildPicks(S.odds);
+  return `${demoBanner(S.odemo,S.oerr,"odds")}<h2>Daily picks (${p.length})</h2>
+  <div class="card mute">Estimates from bookmaker odds with the margin removed. They are predictions, not guarantees. Never stake money you can't afford to lose.</div>
+  ${p.map(pickCard).join("")}`;
+ },
+ async visual(){
+  await loadFixtures(S.date);
+  return `${demoBanner(S.demo,S.err,"fixtures")}<h2>Match visual generator</h2>
+  <input type="date" id="vdt" value="${S.date}" aria-label="Pick a date" style="margin-bottom:8px">
+  <select id="vf" aria-label="Choose a match">${S.fixtures.map(f=>`<option value="${f.id}">${esc(f.home.name)} vs ${esc(f.away.name)}</option>`).join("")}</select>
+  <div class="row" style="margin:10px 0"><button class="btn sp" id="vg">Generate banner</button><button class="btn alt" id="vd">Download PNG</button></div>
+  <canvas id="cv" width="1080" height="1080"></canvas>
+  <p class="mute">Team crests are loaded from football-data.org. Check licensing before using banners commercially.</p>`;
+ },
+ async settings(){
+  return `<h2>Settings</h2>
+  <div class="card"><b>Football data token</b><div class="mute" style="margin:4px 0 8px">From football-data.org (free)</div><input id="k1" value="${esc(store.get("ks_fd"))}" placeholder="Paste token" autocomplete="off"></div>
+  <div class="card"><b>Odds API key</b><div class="mute" style="margin:4px 0 8px">From the-odds-api.com (free)</div><input id="k2" value="${esc(store.get("ks_od"))}" placeholder="Paste key" autocomplete="off"></div>
+  <button class="btn" id="sv">Save settings</button>
+  <p class="mute" style="margin-top:10px">Keys are saved only in this browser. Anyone who opens your site sees their own settings, never yours.</p>`;
+ }
+};
+function groupByLeague(list){
+  const g={}; list.forEach(f=>(g[f.league]=g[f.league]||[]).push(f));
+  return Object.entries(g).map(([n,a])=>`<div class="mute" style="margin:8px 0 4px"><b>${esc(n)}</b></div>${a.map(fxCard).join("")}`).join("");
+}
+function pickCard(p){
+  return `<div class="card"><div class="row"><b class="sp">${esc(p.pick)}</b><span class="pill">${Math.round(p.prob*100)}%</span></div>
+  <div class="mute">${esc(p.ev.home_team)} vs ${esc(p.ev.away_team)} · ${esc(p.market)} · best odds ${p.odds.toFixed(2)}</div><div class="bar" style="margin-top:8px"><i style="width:${Math.round(p.prob*100)}%"></i></div></div>`;
+}
+AFTER.fixtures=()=>$("#dt").onchange=e=>{S.date=e.target.value||today();render()};
+AFTER.table=()=>$("#lg").onchange=e=>{S.league=e.target.value;render()};
+AFTER.odds=()=>$("#ol").onchange=e=>{S.oleague=e.target.value;render()};
+AFTER.settings=()=>$("#sv").onclick=()=>{store.set("ks_fd",$("#k1").value.trim());store.set("ks_od",$("#k2").value.trim());S.tab="home";render()};
+AFTER.visual=()=>{
+  $("#vdt").onchange=e=>{S.date=e.target.value||today();render()};
+  $("#vg").onclick=makeBanner;
+  $("#vd").onclick=()=>{try{const a=document.createElement("a");a.download="kickspark-match.png";a.href=$("#cv").toDataURL("image/png");a.click()}catch(e){alert("Could not export this image. Try again after generating the banner.")}};
+  makeBanner();
+};
+
+/* ============ MATCH CENTRE ============ */
+async function openMatch(id){
+  const f=S.fixtures.find(x=>x.id==id); if(!f) return;
+  const sh=$("#sheet"); $("#modal").classList.add("on");
+  const head=`<div class="row"><b class="sp" style="font-size:17px">${esc(f.home.name)} vs ${esc(f.away.name)}</b><button class="btn alt" id="cl">Close</button></div>`;
+ 
